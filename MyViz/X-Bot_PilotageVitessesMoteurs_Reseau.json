@@ -1,0 +1,218 @@
+{
+	"version": 1,
+	"allow_edit": true,
+	"plugins": [],
+	"panes": [
+		{
+			"title": "Démarrage",
+			"width": 1,
+			"row": {
+				"3": 1,
+				"4": 9
+			},
+			"col": {
+				"3": 1,
+				"4": 2
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "sshcommand",
+					"settings": {
+						"title": "Marche / Arrêt de l'application",
+						"style": "switch",
+						"host": "192.168.0.199",
+						"login": "root",
+						"password": "pcduino",
+						"oncommand": "/root/programmes_python/startAsservissementVitesseDiff.sh",
+						"offcommand": "/root/programmes_python/stopPythonPWM.sh",
+						"ontext": "ON",
+						"offtext": "OFF",
+						"initialstate": false,
+						"caption": "Switch ON"
+					}
+				}
+			]
+		},
+		{
+			"title": "Télémétrie",
+			"width": 1,
+			"row": {
+				"2": 9,
+				"3": 1,
+				"4": 1,
+				"5": 7
+			},
+			"col": {
+				"2": 2,
+				"3": 2,
+				"4": 3,
+				"5": 3
+			},
+			"col_width": "2",
+			"widgets": [
+				{
+					"type": "plot",
+					"settings": {
+						"title": "Moteur droit",
+						"xaxis": "datasource_column",
+						"time": "datasources[\"ws\"][\"Temps\"]",
+						"time_window": "10",
+						"value": [
+							"datasources[\"ws\"][\"ConsigneOmegaDroit\"]",
+							"datasources[\"ws\"][\"omegaDroit\"]"
+						],
+						"y_axis_min_range": "-10,10",
+						"y2value": [
+							"datasources[\"ws\"][\"commandeDroit\"]"
+						],
+						"y2_axis_min_range": "-3,3",
+						"include_legend": true,
+						"legendStr": "Consigne (rad/s), omega (rad/s), Tension (V)",
+						"height": 4,
+						"pausable": true
+					}
+				},
+				{
+					"type": "plot",
+					"settings": {
+						"title": "Moteur gauche",
+						"xaxis": "datasource_column",
+						"time": "datasources[\"ws\"][\"Temps\"]",
+						"time_window": "10",
+						"value": [
+							"datasources[\"ws\"][\"ConsigneOmegaGauche\"]",
+							"datasources[\"ws\"][\"omegaGauche\"]"
+						],
+						"y_axis_min_range": "-10,10",
+						"y2value": [
+							"datasources[\"ws\"][\"commandeGauche\"]"
+						],
+						"y2_axis_min_range": "-3,3",
+						"include_legend": true,
+						"legendStr": "Consigne (rad/s), omega (rad/s), Tension (V)",
+						"height": 4,
+						"pausable": true
+					}
+				},
+				{
+					"type": "plot",
+					"settings": {
+						"title": "Cinématique",
+						"xaxis": "datasource_column",
+						"time": "datasources[\"ws\"][\"Temps\"]",
+						"time_window": 10,
+						"value": [
+							"datasources[\"ws\"][\"Vitesse longitudinale\"]"
+						],
+						"y_axis_min_range": "-0.5,0.5",
+						"y2value": [
+							"datasources[\"ws\"][\"Vitesse de rotation\"]"
+						],
+						"y2_axis_min_range": "-180,180",
+						"include_legend": true,
+						"legendStr": "Vitesse longitudinale (m/s),Vitesse de rotation (deg/s)",
+						"height": 4,
+						"pausable": true
+					}
+				}
+			]
+		},
+		{
+			"title": "Consignes moteurs",
+			"width": 1,
+			"row": {
+				"3": 5,
+				"4": 1,
+				"5": 9
+			},
+			"col": {
+				"3": 1,
+				"4": 2,
+				"5": 1
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "slider",
+					"settings": {
+						"title": "Vitesse (rad/s)",
+						"variable": "datasources[\"ws\"][\"omegaref\"]",
+						"formula": "x",
+						"initialvalue": 0,
+						"min": 0,
+						"max": 10,
+						"resolution": 2,
+						"resetvalue": 0,
+						"resetcaption": "Réinitialisation"
+					}
+				},
+				{
+					"type": "slider",
+					"settings": {
+						"title": "Facteur multiplicatif moteur droit",
+						"variable": "datasources[\"ws\"][\"moteurDroit\"]",
+						"formula": "x",
+						"initialvalue": 0,
+						"min": -1,
+						"max": 1,
+						"resolution": 2,
+						"resetvalue": 0,
+						"resetcaption": "Réinitialisation"
+					}
+				},
+				{
+					"type": "slider",
+					"settings": {
+						"title": "Facteur multiplicatif moteur gauche",
+						"variable": "datasources[\"ws\"][\"moteurGauche\"]",
+						"formula": "x",
+						"initialvalue": 0,
+						"min": -1,
+						"max": 1,
+						"resolution": 2,
+						"resetvalue": 0,
+						"resetcaption": "Réinitialisation"
+					}
+				}
+			]
+		},
+		{
+			"title": "Moniteur",
+			"width": 1,
+			"row": {
+				"3": 27,
+				"4": 23
+			},
+			"col": {
+				"3": 2,
+				"4": 1
+			},
+			"col_width": "2",
+			"widgets": [
+				{
+					"type": "textarea",
+					"settings": {
+						"nblines_window": "10",
+						"value": [
+							"datasources[\"ws\"][\"Raw\"]"
+						]
+					}
+				}
+			]
+		}
+	],
+	"datasources": [
+		{
+			"name": "ws",
+			"type": "websocket",
+			"settings": {
+				"host": "ws://192.168.0.199:9090/ws",
+				"variables_to_send": "omegaref,moteurDroit,moteurGauche",
+				"refresh_rate": "100",
+				"checksum": "sum"
+			}
+		}
+	],
+	"columns": 3
+}

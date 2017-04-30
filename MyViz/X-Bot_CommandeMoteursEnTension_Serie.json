@@ -1,0 +1,201 @@
+{
+	"version": 1,
+	"allow_edit": true,
+	"plugins": [],
+	"panes": [
+		{
+			"title": "Tracés",
+			"width": 1,
+			"row": {
+				"2": 9,
+				"3": 1,
+				"4": 1,
+				"5": 7
+			},
+			"col": {
+				"2": 2,
+				"3": 2,
+				"4": 3,
+				"5": 3
+			},
+			"col_width": "2",
+			"widgets": [
+				{
+					"type": "plot",
+					"settings": {
+						"title": "Tension et vitesse",
+						"xaxis": "datasource_column",
+						"time": "datasources[\"sp\"][\"Temps\"]",
+						"time_window": "4",
+						"value": [
+							"datasources[\"sp\"][\"Tension\"]",
+							"datasources[\"sp\"][\"VitesseMoteurDroit\"]",
+							"datasources[\"sp\"][\"VitesseMoteurGauche\"]"
+						],
+						"y_axis_min_range": "-1,1",
+						"y2_axis_min_range": "-10,10",
+						"include_legend": true,
+						"legendStr": "Tension (V),Vitesse mot. droit (rad/s), Vitesse mot. gauche (rad/s)",
+						"height": 4,
+						"pausable": true
+					}
+				}
+			]
+		},
+		{
+			"title": "Consignes moteurs",
+			"width": 1,
+			"row": {
+				"3": 1,
+				"4": 1,
+				"5": 9
+			},
+			"col": {
+				"3": 1,
+				"4": 2,
+				"5": 1
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "select",
+					"settings": {
+						"title": "Moteur à piloter",
+						"variable": "datasources[\"sp\"][\"moteurint\"]",
+						"listcaptions": "Moteur droit,Moteur gauche,Les deux,Aucun",
+						"listvalues": "0,1,2,3"
+					}
+				},
+				{
+					"type": "switchbutton",
+					"settings": {
+						"title": "Type de signal (carré ou sinus)",
+						"variable": "datasources[\"sp\"][\"typeSignal\"]",
+						"yestext": "Sinus",
+						"notext": "Carré",
+						"initialstate": false
+					}
+				},
+				{
+					"type": "slider",
+					"settings": {
+						"title": "Offset",
+						"variable": "datasources[\"sp\"][\"offset\"]",
+						"formula": "10*x+60",
+						"initialvalue": 0,
+						"min": -6,
+						"max": 6,
+						"resolution": 1,
+						"resetvalue": 0,
+						"resetcaption": "Reset"
+					}
+				},
+				{
+					"type": "slider",
+					"settings": {
+						"title": "Amplitude",
+						"variable": "datasources[\"sp\"][\"amplitude\"]",
+						"formula": "10*x",
+						"initialvalue": 0,
+						"min": 0,
+						"max": 6,
+						"resolution": 1,
+						"resetvalue": 0,
+						"resetcaption": "Reset"
+					}
+				},
+				{
+					"type": "slider",
+					"settings": {
+						"title": "Fréquence",
+						"variable": "datasources[\"sp\"][\"frequence\"]",
+						"formula": "100*x",
+						"initialvalue": 0,
+						"min": 0,
+						"max": 5,
+						"resolution": 2,
+						"resetvalue": 0,
+						"resetcaption": "Reset"
+					}
+				}
+			]
+		},
+		{
+			"title": "Moniteur",
+			"width": 1,
+			"row": {
+				"3": 11,
+				"4": 23
+			},
+			"col": {
+				"3": 2,
+				"4": 1
+			},
+			"col_width": "1",
+			"widgets": [
+				{
+					"type": "textarea",
+					"settings": {
+						"nblines_window": "5",
+						"value": [
+							"datasources[\"sp\"][\"_rawdata\"]"
+						]
+					}
+				}
+			]
+		},
+		{
+			"title": "Vitesse moteurs",
+			"width": 1,
+			"row": {
+				"3": 11,
+				"4": 9,
+				"5": 9
+			},
+			"col": {
+				"3": 3,
+				"4": 4,
+				"5": 3
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "text_widget",
+					"settings": {
+						"title": "Moteur droit",
+						"size": "regular",
+						"value": "datasources[\"sp\"][\"VitesseMoteurDroit\"]",
+						"animate": false,
+						"units": "rad/s"
+					}
+				},
+				{
+					"type": "text_widget",
+					"settings": {
+						"title": "Moteur gauche",
+						"size": "regular",
+						"value": "datasources[\"sp\"][\"VitesseMoteurGauche\"]",
+						"animate": false,
+						"units": "rad/s"
+					}
+				}
+			]
+		}
+	],
+	"datasources": [
+		{
+			"name": "sp",
+			"type": "serialport",
+			"settings": {
+				"port": "COM10",
+				"baudrate": 115200,
+				"variables_to_read": "Temps,Tension,VitesseMoteurDroit,VitesseMoteurGauche",
+				"variables_to_send": "typeSignal,offset,amplitude,frequence,moteurint",
+				"refresh_rate": "500",
+				"separator": ",",
+				"checksum": "sum"
+			}
+		}
+	],
+	"columns": 3
+}
